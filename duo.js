@@ -15,8 +15,10 @@ function Api(user, pass) {
         const { statusCode } = res;
         let error;
         if (statusCode !== 200) {
-          error = new Error('Request Failed.\n' +
-                            `Status Code: ${statusCode}`);
+          error = new Error('Request Failed.\n' + `Status Code: ${statusCode}`);
+        }
+        if (body.failure) {
+          error = new Error(body.message);
         }
         if (error) {
           throw error;
@@ -42,8 +44,7 @@ function Api(user, pass) {
         const { statusCode } = res;
         let error;
         if (statusCode !== 200) {
-          error = new Error('Request Failed.\n' +
-                            `Status Code: ${statusCode}`);
+          error = new Error('Request Failed.\n' + `Status Code: ${statusCode}`);
         }
         if (error) {
           console.error(error.message);
