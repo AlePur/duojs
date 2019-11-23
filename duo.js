@@ -16,9 +16,10 @@ function Api(user, pass) {
         let error;
         if (statusCode !== 200) {
           error = new Error('Request Failed.\n' + `Status Code: ${statusCode}`);
-        }
-        if (body.failure) {
-          error = new Error(body.message);
+        } else {
+          if (body.failure) {
+            error = new Error(body.message);
+          }
         }
         if (error) {
           throw error;
@@ -26,13 +27,10 @@ function Api(user, pass) {
         resolve(res.headers['jwt']);
       });
     });
-  })();
-  this.ready = (() => {
-    this.token.then((x) => {
-      this.token = x;
-      this.app.emit('ready');
-    });
-  })();
+  })().then((x) => {
+    this.token = x;
+    this.app.emit('ready');
+  });
   this.getUserObject = (name) => {
     return new Promise((resolve, reject) => {
       request.get({
